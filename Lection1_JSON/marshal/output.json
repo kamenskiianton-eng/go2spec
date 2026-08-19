@@ -1,0 +1,9 @@
+{
+   "name": "Ivan",
+   "science_id": 7333,
+   "is_working": true,
+   "University": {
+      "name": "MFUA",
+      "city": "Moscow"
+   }
+}

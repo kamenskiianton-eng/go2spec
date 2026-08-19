@@ -1,0 +1,35 @@
+@hostname = http://127.0.0.1
+@port = 3000
+@singleBookId = 2
+
+### Get all books
+GET {{hostname}}:{{port}}/books HTTP/1.1
+
+### Get single book
+GET {{hostname}}:{{port}}/books/{{singleBookId}} HTTP/1.1
+
+### Create book
+POST {{hostname}}:{{port}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "4",
+    "title": "Портрет Дориана Грея",
+    "author": "Оскар Уайльд"
+}
+
+### Delete book
+DELETE {{hostname}}:{{port}}/books/3 HTTP/1.1
+
+### Delete all books
+DELETE {{hostname}}:{{port}}/books HTTP/1.1
+
+### Update book
+PUT {{hostname}}:{{port}}/books/4 HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "this value will be ignored",
+    "title": "Дориана",
+    "author": "Уайльд"
+}
