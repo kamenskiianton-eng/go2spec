@@ -1,0 +1,49 @@
+set dotenv-load
+
+# create psql container
+pg_up:
+    docker compose up -d
+
+# remove pg container
+pg_down:
+    docker compose down
+
+# start pg service
+pg_start:
+    docker compose start
+
+# stop pg service
+pg_stop:
+    docker compose stop
+
+# create bankdb
+createdb:
+    docker compose exec db createdb --username=$POSTGRES_USER --owner=$POSTGRES_USER bankdb
+
+# drop bankdb
+dropdb:
+    docker compose exec db dropdb --username=$POSTGRES_USER bankdb
+
+# apply migration to create tables
+migrateup:
+    migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose up
+
+# apply migration to drop tables
+migratedown:
+    migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose down
+
+
+migratecheck:
+    migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose version
+
+# psql
+psql:
+    docker compose exec -it db psql -U app_user -d bankdb
+
+# sqlc codegen
+sqlc:
+    sqlc generate
+
+# test code
+test:
+    go test -v -cover -timeout 180s ./... -count=1
