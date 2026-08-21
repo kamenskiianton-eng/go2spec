@@ -49,8 +49,9 @@ func TestListAccounts(t *testing.T) {
 
 // Создаем аккаунт с фиксированными данными, обновляем данные, получаем ещё раз из БД и убеждаемся, что данные обновились
 func TestUpdateAccount(t *testing.T) {
+	user := createRandomUser(t)
 	createdAccount, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    "owner-initial",
+		Owner:    user.Username,
 		Balance:  1000,
 		Currency: "USD",
 	})
@@ -72,8 +73,9 @@ func TestUpdateAccount(t *testing.T) {
 // Создаем аккаунт и удаляем его. Пытаемся найти его в БД.
 func TestDeleteAccount(t *testing.T) {
 	account := createRandomAccount(t)
-	err := testQueries.DeleteAccount(context.Background(), account.ID)
+	cnt, err := testQueries.DeleteAccount(context.Background(), account.ID)
 	require.NoError(t, err)
+	require.EqualValues(t, 1, cnt)
 
 	notFoundAccount, err := testQueries.GetAccount(context.Background(), account.ID)
 	require.Error(t, err)
@@ -81,9 +83,11 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func createRandomAccount(t *testing.T) Account {
+	user := createRandomUser(t)
+
 	ra := utils.RandomAccount()
 	arg := CreateAccountParams{
-		Owner:    ra.Owner,
+		Owner:    user.Username,
 		Balance:  ra.Balance,
 		Currency: Currency(ra.Currency),
 	}

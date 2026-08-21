@@ -28,10 +28,15 @@ dropdb:
 migrateup:
     migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose up
 
+migrateup2:
+    migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose up 1
+
 # apply migration to drop tables
 migratedown:
     migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose down
 
+migratedown2:
+    migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose down 2
 
 migratecheck:
     migrate -path db/migrations -database "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/bankdb?sslmode=disable" -verbose version
@@ -47,3 +52,7 @@ sqlc:
 # test code
 test:
     go test -v -cover -timeout 180s ./... -count=1
+
+# run main.go
+gostart:
+    go run main.go
